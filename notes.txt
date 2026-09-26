@@ -1,0 +1,321 @@
+# Logistic Regression
+
+## 1. What is Logistic Regression?
+
+Logistic Regression is a **Machine Learning algorithm used for classification**.
+
+It predicts a **category/class**.
+
+Example:
+
+```text
+Study Hours → Result
+
+2 → Fail
+3 → Fail
+6 → Pass
+8 → Pass
+```
+
+We can represent:
+
+```text
+0 = Fail
+1 = Pass
+```
+
+---
+
+## 2. Basic Workflow
+
+```text
+Data
+ ↓
+Train-Test Split
+ ↓
+Training Data
+ ↓
+model.fit()
+ ↓
+Model learns
+ ↓
+Testing Data
+ ↓
+model.predict()
+ ↓
+Check performance
+```
+
+---
+
+## 3. X and y
+
+```python
+X = input/features
+y = target/answer
+```
+
+Example:
+
+```python
+X = [[1], [2], [3], [5], [6], [8]]
+
+y = [0, 0, 0, 1, 1, 1]
+```
+
+Meaning:
+
+```text
+1 hour → Fail (0)
+2 hours → Fail (0)
+3 hours → Fail (0)
+5 hours → Pass (1)
+6 hours → Pass (1)
+8 hours → Pass (1)
+```
+
+---
+
+## 4. Create the Model
+
+```python
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression()
+```
+
+`LogisticRegression()` creates the ML model.
+
+At this point, the model has **not learned yet**.
+
+---
+
+## 5. Train the Model
+
+```python
+model.fit(X_train, y_train)
+```
+
+`fit()` means:
+
+> **Train/learn from the given data.**
+
+The model looks at:
+
+```text
+Input → Correct Answer
+
+1 → 0
+2 → 0
+5 → 1
+6 → 1
+```
+
+and learns a **mathematical relationship/pattern** between input and output.
+
+---
+
+# 6. Why do we split the data?
+
+We use:
+
+```python
+from sklearn.model_selection import train_test_split
+```
+
+Then:
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+```
+
+The data is divided into:
+
+```text
+Original Data
+     ↓
+ ┌───────────────┬──────────────┐
+ ↓               ↓
+Training Data    Testing Data
+ ↓               ↓
+Model learns     Model is checked
+```
+
+### Training Data
+
+Used for learning:
+
+```python
+model.fit(X_train, y_train)
+```
+
+### Testing Data
+
+Used to check whether the model learned correctly:
+
+```python
+prediction = model.predict(X_test)
+```
+
+---
+
+## 7. Important Difference
+
+### Training data
+
+> Data the model uses to learn.
+
+### Testing data
+
+> Data the model did not see during training and is used to check the model.
+
+So:
+
+```text
+Training Data → Learn
+Testing Data  → Check
+```
+
+We do **not** call it "trained data and untrained data."
+
+Correct terms are:
+
+**Training data and Testing data.**
+
+---
+
+# 8. Prediction
+
+After training:
+
+```python
+prediction = model.predict([[4]])
+```
+
+Here `4` is a **new input**.
+
+The model uses what it learned during training and predicts:
+
+```text
+4 hours → Pass/Fail
+```
+
+---
+
+# 9. Testing vs New Prediction
+
+This is an important concept.
+
+### Testing
+
+```python
+model.predict(X_test)
+```
+
+Purpose:
+
+> Check how well the model learned.
+
+We already know the correct answers:
+
+```python
+y_test
+```
+
+So we can compare:
+
+```text
+Prediction → 1
+Actual     → 1
+             ✓
+```
+
+### New Prediction
+
+```python
+model.predict([[4]])
+```
+
+Purpose:
+
+> Get a prediction for a new real-world input.
+
+We don't know the answer beforehand.
+
+---
+
+# 10. Complete Example
+
+```python
+import numpy as np
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+# Data
+X = np.array([[1], [2], [3], [5], [6], [8]])
+y = np.array([0, 0, 0, 1, 1, 1])
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create model
+model = LogisticRegression()
+
+# Train
+model.fit(X_train, y_train)
+
+# Test
+prediction = model.predict(X_test)
+
+print("Prediction:", prediction)
+print("Actual:", y_test)
+
+# New prediction
+hours = float(input("Enter study hours: "))
+
+result = model.predict([[hours]])
+
+if result[0] == 1:
+    print("Pass")
+else:
+    print("Fail")
+```
+
+---
+
+# 11. Important Functions
+
+| Code                   | Meaning                               |
+| ---------------------- | ------------------------------------- |
+| `LogisticRegression()` | Creates the model                     |
+| `train_test_split()`   | Splits data into training and testing |
+| `fit()`                | Trains/learns from data               |
+| `predict()`            | Makes predictions                     |
+| `predict_proba()`      | Gives probability                     |
+
+---
+
+## 12. Easy Memory Trick
+
+```text
+X → Input
+y → Correct Answer
+
+train_test_split()
+        ↓
+X_train, y_train → Learning
+X_test, y_test   → Checking
+
+fit()             → Learn
+predict()         → Predict
+predict_proba()   → Probability
+```
+
+### One-line definition
+
+> **Logistic Regression is a classification algorithm that learns from training data and predicts the class/category of new data.**
